@@ -1,0 +1,4 @@
+[root]
+name = "writing-an-interpreter-in-rust"
+version = "0.1.0"
+

@@ -1,0 +1,6 @@
+[package]
+name = "writing-an-interpreter-in-rust"
+version = "0.1.0"
+authors = ["mzumi <mukaiyama@careerindex.co.jp>"]
+
+[dependencies]
