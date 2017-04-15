@@ -131,7 +131,6 @@ impl Lexer {
         if self.read_position > chars.len() {
             None
         } else {
-            println!("{}", chars[self.read_position]);
             Some(chars[self.read_position])
         }
     }
