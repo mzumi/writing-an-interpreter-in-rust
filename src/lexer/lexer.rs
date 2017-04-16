@@ -91,14 +91,7 @@ impl Lexer {
             self.read_char();
         }
 
-        self.input
-            .chars()
-            .collect::<Vec<char>>()
-            .get(position..self.position)
-            .unwrap()
-            .into_iter()
-            .collect()
-
+        self.slice_input(position)
     }
 
     fn read_number(&mut self) -> String {
@@ -107,13 +100,7 @@ impl Lexer {
             self.read_char();
         }
 
-        self.input
-            .chars()
-            .collect::<Vec<char>>()
-            .get(position..self.position)
-            .unwrap()
-            .into_iter()
-            .collect()
+        self.slice_input(position)
     }
 
     fn skip_whitespace(&mut self) {
@@ -144,6 +131,17 @@ impl Lexer {
             }
         }
         None
+    }
+
+    fn slice_input(&self, position: usize) -> String {
+        self.input
+            .chars()
+            .collect::<Vec<char>>()
+            .get(position..self.position)
+            .unwrap()
+            .into_iter()
+            .map(|c| c.clone())
+            .collect()
     }
 }
 
