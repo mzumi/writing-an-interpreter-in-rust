@@ -2,55 +2,55 @@ use std::str::FromStr;
 
 #[derive(Debug, PartialEq)]
 pub enum TokenType {
-    ILLEGAL,
+    Illegal,
     EOF,
 
     // Identifier + literals
-    IDENT,
-    INT,
+    Ident,
+    Int,
 
     // Operaters
-    ASSIGN,
-    PLUS,
-    MINUS,
-    BANG,
-    ASTERISK,
-    SLASH,
+    Assign,
+    Plus,
+    Minus,
+    Bang,
+    Asterisk,
+    Slash,
 
     LT,
     GT,
 
     EQ,
-    NOT_EQ,
+    NotEQ,
 
     // Delimiters
-    COMMA,
-    SEMICOLON,
+    Comma,
+    Semicolon,
 
-    LPAREN,
-    RPAREN,
-    LBRACE,
-    RBRACE,
+    LParen,
+    RParen,
+    LBrace,
+    RBrace,
 
     // Keywords
-    FUNCTION,
-    LET,
-    TRUE,
-    FALSE,
-    IF,
-    ELSE,
-    RETURN,
+    Function,
+    Let,
+    True,
+    False,
+    If,
+    Else,
+    Return,
 }
 
 impl TokenType {
     pub fn lookup_indent(indent: &String) -> Self {
-        let keywords = [TokenType::FUNCTION,
-                        TokenType::LET,
-                        TokenType::IF,
-                        TokenType::RETURN,
-                        TokenType::TRUE,
-                        TokenType::FALSE,
-                        TokenType::ELSE];
+        let keywords = [TokenType::Function,
+                        TokenType::Let,
+                        TokenType::If,
+                        TokenType::Return,
+                        TokenType::True,
+                        TokenType::False,
+                        TokenType::Else];
 
         let token_type = indent.parse::<TokenType>();
         if let Some(t) = token_type.ok() {
@@ -59,7 +59,7 @@ impl TokenType {
             }
         }
 
-        TokenType::IDENT
+        TokenType::Ident
     }
 }
 
@@ -68,29 +68,29 @@ impl FromStr for TokenType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "=" => Ok(TokenType::ASSIGN),
-            "+" => Ok(TokenType::PLUS),
-            "-" => Ok(TokenType::MINUS),
-            "!" => Ok(TokenType::BANG),
-            "*" => Ok(TokenType::ASTERISK),
-            "/" => Ok(TokenType::SLASH),
+            "=" => Ok(TokenType::Assign),
+            "+" => Ok(TokenType::Plus),
+            "-" => Ok(TokenType::Minus),
+            "!" => Ok(TokenType::Bang),
+            "*" => Ok(TokenType::Asterisk),
+            "/" => Ok(TokenType::Slash),
             "<" => Ok(TokenType::LT),
             ">" => Ok(TokenType::GT),
-            "," => Ok(TokenType::COMMA),
-            ";" => Ok(TokenType::SEMICOLON),
-            "(" => Ok(TokenType::LPAREN),
-            ")" => Ok(TokenType::RPAREN),
-            "{" => Ok(TokenType::LBRACE),
-            "}" => Ok(TokenType::RBRACE),
+            "," => Ok(TokenType::Comma),
+            ";" => Ok(TokenType::Semicolon),
+            "(" => Ok(TokenType::LParen),
+            ")" => Ok(TokenType::RParen),
+            "{" => Ok(TokenType::LBrace),
+            "}" => Ok(TokenType::RBrace),
             "==" => Ok(TokenType::EQ),
-            "!=" => Ok(TokenType::NOT_EQ),
-            "fn" => Ok(TokenType::FUNCTION),
-            "let" => Ok(TokenType::LET),
-            "if" => Ok(TokenType::IF),
-            "return" => Ok(TokenType::RETURN),
-            "true" => Ok(TokenType::TRUE),
-            "false" => Ok(TokenType::FALSE),
-            "else" => Ok(TokenType::ELSE),
+            "!=" => Ok(TokenType::NotEQ),
+            "fn" => Ok(TokenType::Function),
+            "let" => Ok(TokenType::Let),
+            "if" => Ok(TokenType::If),
+            "return" => Ok(TokenType::Return),
+            "true" => Ok(TokenType::True),
+            "false" => Ok(TokenType::False),
+            "else" => Ok(TokenType::Else),
             _ => Err(ParseTokenError),
         }
     }
@@ -101,17 +101,17 @@ pub struct ParseTokenError;
 
 #[test]
 fn parse_test() {
-    let tests = vec![("=", TokenType::ASSIGN),
-                     ("+", TokenType::PLUS),
-                     (",", TokenType::COMMA),
-                     (";", TokenType::SEMICOLON),
-                     ("(", TokenType::LPAREN),
-                     (")", TokenType::RPAREN),
-                     ("{", TokenType::LBRACE),
-                     ("}", TokenType::RBRACE),
-                     ("fn", TokenType::FUNCTION),
-                     ("let", TokenType::LET),
-                     ("if", TokenType::IF)];
+    let tests = vec![("=", TokenType::Assign),
+                     ("+", TokenType::Plus),
+                     (",", TokenType::Comma),
+                     (";", TokenType::Semicolon),
+                     ("(", TokenType::LParen),
+                     (")", TokenType::RParen),
+                     ("{", TokenType::LBrace),
+                     ("}", TokenType::RBrace),
+                     ("fn", TokenType::Function),
+                     ("let", TokenType::Let),
+                     ("if", TokenType::If)];
 
     for (s, e) in tests {
         assert_eq!(s.parse::<TokenType>().unwrap(), e);
