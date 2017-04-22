@@ -1,6 +1,7 @@
+use std::fmt;
 use std::str::FromStr;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum TokenType {
     Illegal,
     EOF,
@@ -93,6 +94,12 @@ impl FromStr for TokenType {
             "else" => Ok(TokenType::Else),
             _ => Err(ParseTokenError),
         }
+    }
+}
+
+impl fmt::Display for TokenType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
