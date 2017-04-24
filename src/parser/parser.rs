@@ -1,6 +1,6 @@
 use lexer::Lexer;
 use token::{Token, TokenType};
-use ast::{Program, Statement, LetStatement, Identifier};
+use ast::{Program, Statement, LetStatement, Identifier, ReturnStatement};
 use parser::{ParseError, ParseErrorKind};
 
 #[derive(Debug, Clone)]
@@ -53,6 +53,11 @@ impl Parser {
                 let s: Result<Box<Statement>, _> = Ok(Box::new(let_statement));
                 return s;
             }
+            TokenType::Return => {
+                let return_statement = self.parse_return_statement()?;
+                let s: Result<Box<Statement>, _> = Ok(Box::new(return_statement));
+                return s;
+            }
             _ => {
                 Err(ParseError::new(ParseErrorKind::UnexpectedToken(self.clone(),
                                                                     self.current_token
@@ -76,6 +81,21 @@ impl Parser {
         };
 
         self.expect_peek(TokenType::Assign)?;
+
+        loop {
+            if self.current_token_is(TokenType::Semicolon) {
+                break;
+            }
+            self.next_token();
+        }
+
+        Ok(statement)
+    }
+
+    fn parse_return_statement(&mut self) -> Result<ReturnStatement, ParseError> {
+        let statement = ReturnStatement { token: self.current_token.clone() };
+
+        self.next_token();
 
         loop {
             if self.current_token_is(TokenType::Semicolon) {
@@ -143,4 +163,23 @@ fn test_invalid_let_statement() {
     assert!(program.is_err());
     assert_eq!("expected next token to be Ident, got Assign instead",
                program.err().unwrap().error_description());
+}
+
+#[test]
+fn test_return_statement() {
+    let input = r#"
+    return 5;
+    return 10;
+    return add(15);
+    "#
+        .to_owned();
+
+    let lexer = Lexer::new(input);
+    let mut parser = Parser::new(lexer);
+
+    let program = parser.parser_program().unwrap();
+    assert_eq!(3, program.statements.len());
+    for s in program.statements {
+        assert_eq!("return".to_owned(), s.token_literal());
+    }
 }
