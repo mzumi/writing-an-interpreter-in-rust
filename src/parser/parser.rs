@@ -78,6 +78,7 @@ impl Parser {
         let statement = LetStatement {
             token: token,
             name: name,
+            value: None,
         };
 
         self.expect_peek(TokenType::Assign)?;
@@ -93,7 +94,10 @@ impl Parser {
     }
 
     fn parse_return_statement(&mut self) -> Result<ReturnStatement, ParseError> {
-        let statement = ReturnStatement { token: self.current_token.clone() };
+        let statement = ReturnStatement {
+            token: self.current_token.clone(),
+            return_value: None,
+        };
 
         self.next_token();
 
